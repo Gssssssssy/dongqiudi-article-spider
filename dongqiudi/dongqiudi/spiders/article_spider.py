@@ -18,7 +18,9 @@ class DongQiuDiSpider(Spider):
                       'NewsApp/127 SDK/25 '
     }
     count = 0
+    baseline = 100    # 基线条件
 
+    # TODO(coder.gsy@gmail.com): 完成五大联赛等 Tabs 的爬取。
     def start_requests(self):
         headline_url = 'https://api.dongqiudi.com/app/tabs/android/1.json'
         yield Request(headline_url, callback=self.parse, headers=self.headers)
@@ -27,7 +29,7 @@ class DongQiuDiSpider(Spider):
         self.count += 1
         data = json.loads(response.body)
         if data.get('articles'):
-            articles = data.get('articles')
+            articles = data.get('articles')    # 获取文章列表
             for i, article in enumerate(articles):
                 item = DongQiuDiItem()
                 item['label'] = data.get('label', '')
@@ -42,9 +44,9 @@ class DongQiuDiSpider(Spider):
                                   headers=self.headers)
 
         if data.get('next'):
-            while self.count < 1:
+            while self.count < self.baseline:    # 递归条件
                 headline_url = data.get('next')
-                yield Request(headline_url, callback=self.parse, headers=self.headers)
+                yield Request(headline_url, callback=self.parse, headers=self.headers)   # 递归抓取
 
     def parse_article_detail(self, response):
         data = json.loads(response.body)
@@ -71,9 +73,19 @@ class DongQiuDiSpider(Spider):
 
     @staticmethod
     def extract_relative_tags(channels):
+        """
+        从 `channels` 数组内提取每个 tag 并拼接成单个字符串
+        :param channels: 相关 tags 数组
+        :return: tags 字符串
+        """
         tag_list = [channel.get('tag', '') for channel in channels]
         return ';'.join(tag_list)
 
     @staticmethod
     def clean_article_html_tags(text):
+        """
+        移除文章内容里的 HTML 标签
+        :param text: HTML 文本
+        :return:
+        """
         return lxml.html.fromstring(text).text_content()
