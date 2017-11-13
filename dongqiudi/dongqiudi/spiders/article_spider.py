@@ -12,11 +12,16 @@ from ..items import DongQiuDiItem
 
 class DongQiuDiSpider(Spider):
     name = 'article'
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 7.1.2; Nexus 5X Build/N2G48C; wv) AppleWebKit/537.36 (KHTML, '
+                      'like Gecko) Version/4.0 Chrome/60.0.3112.116 Mobile Safari/537.36 News/127 Android/127 '
+                      'NewsApp/127 SDK/25 '
+    }
     count = 0
 
     def start_requests(self):
         headline_url = 'https://api.dongqiudi.com/app/tabs/android/1.json'
-        yield Request(headline_url, callback=self.parse)
+        yield Request(headline_url, callback=self.parse, headers=self.headers)
 
     def parse(self, response):
         self.count += 1
@@ -33,12 +38,13 @@ class DongQiuDiSpider(Spider):
 
                 if article.get('id'):
                     detail_url = 'https://api.dongqiudi.com/v2/article/detail/{art_id}'.format(art_id=article.get('id'))
-                    yield Request(detail_url, callback=self.parse_article_detail, meta={'item': item})
+                    yield Request(detail_url, callback=self.parse_article_detail, meta={'item': item},
+                                  headers=self.headers)
 
         if data.get('next'):
             while self.count < 1:
                 headline_url = data.get('next')
-                yield Request(headline_url, callback=self.parse)
+                yield Request(headline_url, callback=self.parse, headers=self.headers)
 
     def parse_article_detail(self, response):
         data = json.loads(response.body)
