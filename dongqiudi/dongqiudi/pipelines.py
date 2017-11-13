@@ -4,11 +4,14 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
+import sys
 from scrapy.exceptions import DropItem
 import datetime
 
 from .models import DBSession, Articles
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 class DongQiuDiPipeline(object):
     def __init__(self):
