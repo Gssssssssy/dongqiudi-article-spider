@@ -64,7 +64,8 @@ class DongQiuDiSpider(Spider):
             share_url = 'https://api.dongqiudi.com/share/list/article/{art_id}'.format(art_id=item['article_id'])
             yield Request(share_url, callback=self.parse_article_share_link, meta={'item': item})
 
-    def parse_article_share_link(self, response):
+    @staticmethod
+    def parse_article_share_link(response):
         data = json.loads(response.body)
         share_count = data.get('total', 0)
         item = response.meta['item']
@@ -81,6 +82,7 @@ class DongQiuDiSpider(Spider):
         tag_list = [channel.get('tag', '') for channel in channels]
         return ';'.join(tag_list)
 
+    # TODO(coder.gsy@gmail.com): 改换成 ItemLoader 作数据预处理。
     @staticmethod
     def clean_article_html_tags(text):
         """

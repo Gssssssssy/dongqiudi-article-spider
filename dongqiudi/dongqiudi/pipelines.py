@@ -21,7 +21,7 @@ class DongQiuDiPipeline(object):
         self.article_id_seen = set()
 
     def process_item(self, item, spider):
-        if item['article_id'] in self.article_id_seen:    # 除重
+        if item['article_id'] in self.article_id_seen:  # 除重
             raise DropItem("Duplicate item found: %s" % item)
         self.article_id_seen.add(item['article_id'])
 
@@ -32,7 +32,7 @@ class DongQiuDiPipeline(object):
                 correct_date = published_at_2_datetime.replace(year=nt.year).strftime("%Y-%m-%d %H:%M:%S")
                 item['published_at'] = correct_date
 
-        # TODO(coder.gsy@gmail.com): 改换成 ItemLoader 作数据预处理
+        # TODO(coder.gsy@gmail.com): 改换成 ItemLoader 作数据预处理。
         if not item['source']:
             item['source'] = u''
 
@@ -41,12 +41,13 @@ class DongQiuDiPipeline(object):
         if not queryset:
             self.session.add(Articles(created_time=nt, last_updated=nt, **item))
         else:
-            queryset.visit_total = item['visit_total']
             queryset.comments = item['comments']
             queryset.share = item['share']
             queryset.last_updated = nt
+            if item.get('visit_total'):
+                queryset.visit_total = item['visit_total']
         self.session.commit()
         return item
 
-    def close_spider(self, spider):   # 上下文管理
+    def close_spider(self, spider):  # 上下文管理
         self.session.close()
