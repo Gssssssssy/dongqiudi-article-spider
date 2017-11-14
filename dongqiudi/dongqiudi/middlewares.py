@@ -5,7 +5,10 @@
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
+import random
+
 from scrapy import signals
+from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 
 
 class DongqiudiSpiderMiddleware(object):
@@ -54,3 +57,23 @@ class DongqiudiSpiderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class RandomUserAgentMiddleware(UserAgentMiddleware):
+    def process_request(self, request, spider):
+        # agent = random.choice(user_agent_list)
+        # request.header['User-Agent'] = agent
+        pass
+
+
+class RandomProxyMiddlerware(object):
+
+    def __init__(self):
+        # self.client = xxxx    # 建立 IP 池数据库客户端
+        # self.ip_pools = self.client.get_all()    # 获取池子里所有 IP
+        pass
+
+    def proccess_request(self, request, spider):
+        # ip, port = random.choice(self.ip_pools).items()
+        # request.meta['proxy'] = 'http://{ip}:{port}'.format(ip, port)
+        pass

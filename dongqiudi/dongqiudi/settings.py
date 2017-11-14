@@ -52,7 +52,9 @@ DOWNLOAD_DELAY = 1.5
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 # DOWNLOADER_MIDDLEWARES = {
-#    'dongqiudi.middlewares.MyCustomDownloaderMiddleware': 543,
+   # 'dongqiudi.middlewares.MyCustomDownloaderMiddleware': 543,
+   #  'dongqiudi.middlewares.RandomUserAgentMiddleware': 400,
+   #  'dongqiudi.middlewares.RandomProxyMiddlerware': 100,
 # }
 
 # Enable or disable extensions
