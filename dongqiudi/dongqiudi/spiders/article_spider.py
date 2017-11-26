@@ -17,19 +17,22 @@ class DongQiuDiSpider(Spider):
                       'like Gecko) Version/4.0 Chrome/60.0.3112.116 Mobile Safari/537.36 News/127 Android/127 '
                       'NewsApp/127 SDK/25 '
     }
-    count = 0
-    baseline = 100    # 基线条件
+    tabs = {1: '头条', 3: '英超', 4: '意甲', 5: '西甲', 6: '德甲', 37: '闲情',
+            55: '深度', 56: '国内', 57: '五洲', 58: '足彩', 104: '热门'}
+    total_count = {1: 0, 3: 0, 4: 0, 5: 0, 6: 0, 37: 0, 55: 0, 56: 0, 57: 0, 58: 0, 104: 0}
+    baseline = 100  # 基线条件
 
-    # TODO(coder.gsy@gmail.com): 完成五大联赛等 Tabs 的爬取。
     def start_requests(self):
-        headline_url = 'https://api.dongqiudi.com/app/tabs/android/1.json'
-        yield Request(headline_url, callback=self.parse, headers=self.headers)
+        for i, key in enumerate(self.tabs.keys()):
+            url = 'https://api.dongqiudi.com/app/tabs/android/{key}.json'.format(key=key)
+            yield Request(url, callback=self.parse, headers=self.headers, meta={'key': key})
 
     def parse(self, response):
-        self.count += 1
+        key = response.meta['key']
+        self.total_count[key] += 1
         data = json.loads(response.body)
         if data.get('articles'):
-            articles = data.get('articles')    # 获取文章列表
+            articles = data.get('articles')  # 获取文章列表
             for i, article in enumerate(articles):
                 item = DongQiuDiItem()
                 item['label'] = data.get('label', '')
@@ -44,9 +47,9 @@ class DongQiuDiSpider(Spider):
                                   headers=self.headers)
 
         if data.get('next'):
-            while self.count < self.baseline:    # 递归条件
+            while self.total_count[key] < self.baseline:  # 递归条件
                 headline_url = data.get('next')
-                yield Request(headline_url, callback=self.parse, headers=self.headers)   # 递归抓取
+                yield Request(headline_url, callback=self.parse, headers=self.headers, meta={'key': key})  # 递归抓取
 
     def parse_article_detail(self, response):
         data = json.loads(response.body)
