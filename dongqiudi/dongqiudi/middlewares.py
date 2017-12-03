@@ -9,6 +9,7 @@ import random
 
 from scrapy import signals
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
+from .settings import PROXIES
 
 
 class DongqiudiSpiderMiddleware(object):
@@ -67,13 +68,12 @@ class RandomUserAgentMiddleware(UserAgentMiddleware):
 
 
 class RandomProxyMiddlerware(object):
-
     def __init__(self):
         # self.client = xxxx    # 建立 IP 池数据库客户端
-        # self.ip_pools = self.client.get_all()    # 获取池子里所有 IP
+        self.ip_pools = dict(PROXIES)  # 获取池子里所有 IP
         pass
 
     def proccess_request(self, request, spider):
-        # ip, port = random.choice(self.ip_pools).items()
-        # request.meta['proxy'] = 'http://{ip}:{port}'.format(ip, port)
-        pass
+        ip, port = random.choice(self.ip_pools).items()
+        request.meta['proxy'] = 'http://{ip}:{port}'.format(ip=ip, port=port)
+        print 'Proxy: change to {}.\n'.format(ip)

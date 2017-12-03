@@ -18,7 +18,7 @@ sys.setdefaultencoding('utf-8')
 class DongQiuDiPipeline(object):
     def __init__(self):
         self.session = DBSession()
-        self.article_id_seen = set(self.session.query(Articles.article_id).all())
+        self.article_id_seen = set(map(lambda x: int(x[0]), self.session.query(Articles.article_id).all()))
         self.results = []
 
     def process_item(self, item, spider):
@@ -51,13 +51,14 @@ class DongQiuDiPipeline(object):
         #     if item.get('visit_total'):
         #         queryset.visit_total = item['visit_total']
         # self.session.commit()
-        # return item
         if len(self.results) >= 100:
             self.session.bulk_save_objects(self.results)
+            self.results = []
         self.session.commit()
+        return item
 
     def close_spider(self, spider):  # 上下文管理
-        if not self.results:
+        if self.results:
             self.session.bulk_save_objects(self.results)
         self.session.commit()
 
