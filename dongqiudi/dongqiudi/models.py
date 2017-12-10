@@ -16,7 +16,7 @@ class Articles(Base):
     __tablename__ = 'articles'
     __table_args__ = {
         'mysql_engine': 'InnoDB',
-        'mysql_charset': 'utf8'
+        'mysql_charset': 'utf8',
     }
 
     id = Column(Integer(), primary_key=True)
@@ -33,3 +33,14 @@ class Articles(Base):
     published_at = Column(DateTime)
     created_time = Column(DateTime)
     last_updated = Column(DateTime)
+
+
+class URLStorage(Base):
+    __tablename__ = 'url_storage'
+    __table_args__ = {
+        'mysql_engine': 'InnoDB',
+        'mysql_charset': 'utf8'
+    }
+
+    id = Column(Integer(), primary_key=True)
+    url = Column(String(255))

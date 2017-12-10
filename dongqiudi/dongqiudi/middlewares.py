@@ -6,10 +6,10 @@
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 import random
+import pandas as pd
 
 from scrapy import signals
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
-from .settings import PROXIES
 
 
 class DongqiudiSpiderMiddleware(object):
@@ -67,13 +67,28 @@ class RandomUserAgentMiddleware(UserAgentMiddleware):
         pass
 
 
-class RandomProxyMiddlerware(object):
+class RandomProxyMiddleware(object):
     def __init__(self):
         # self.client = xxxx    # 建立 IP 池数据库客户端
-        self.ip_pools = dict(PROXIES)  # 获取池子里所有 IP
-        pass
+        # self.ip_pools = dict(PROXIES)  # 获取池子里所有 IP
+        self.proxies = [[u'182.139.160.86', u'9797'],
+                        [u'222.217.19.248', u'8080'],
+                        [u'124.89.33.75', u'9999'],
+                        [u'27.46.42.59', u'9797'],
+                        [u'27.46.41.127', u'9797'],
+                        [u'116.23.95.90', u'9999'],
+                        [u'27.46.41.127', '9797'],
+                        [u'116.23.95.90', '9999'],
+                        [u'182.139.160.86', '9797'],
+                        [u'14.211.124.112', '9797'],
+                        [u'182.92.207.196', '80'],
+                        [u'27.46.42.59', '9797'],
+                        [u'182.92.207.196', '3128'],
+                        [u'222.217.19.248', '8080'],
+                        [u'113.108.253.195', '9797'],
+                        [u'124.89.33.75', '9999']]
 
-    def proccess_request(self, request, spider):
-        ip, port = random.choice(self.ip_pools).items()
-        request.meta['proxy'] = 'http://{ip}:{port}'.format(ip=ip, port=port)
+    def process_request(self, request, spider):
+        ip, port = random.choice(self.proxies)
         print 'Proxy: change to {}.\n'.format(ip)
+        request.meta['proxy'] = 'http://{ip}:{port}'.format(ip=ip, port=port)
