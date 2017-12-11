@@ -33,6 +33,7 @@ class Articles(Base):
     published_at = Column(DateTime)
     created_time = Column(DateTime)
     last_updated = Column(DateTime)
+    href = Column(String(255))
 
 
 class URLStorage(Base):

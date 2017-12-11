@@ -20,7 +20,7 @@ class DongQiuDiSpider(Spider):
     tabs = {1: '头条', 3: '英超', 4: '意甲', 5: '西甲', 6: '德甲', 37: '闲情',
             55: '深度', 56: '国内', 57: '五洲', 58: '足彩', 104: '热门'}
     total_count = {1: 0, 3: 0, 4: 0, 5: 0, 6: 0, 37: 0, 55: 0, 56: 0, 57: 0, 58: 0, 104: 0}
-    baseline = 300  # 基线条件
+    baseline = 200  # 基线条件
 
     def start_requests(self):
         for i, key in enumerate(self.tabs.keys()):
@@ -40,6 +40,7 @@ class DongQiuDiSpider(Spider):
                 item['title'] = article.get('title')
                 item['comments'] = article.get('comments_total')
                 item['published_at'] = article.get('published_at')
+                item['href'] = response.request.url
 
                 if article.get('id'):
                     detail_url = 'https://api.dongqiudi.com/v2/article/detail/{art_id}'.format(art_id=article.get('id'))

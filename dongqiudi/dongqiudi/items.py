@@ -22,3 +22,4 @@ class DongQiuDiItem(scrapy.Item):
     source = scrapy.Field()
     visit_total = scrapy.Field()
     published_at = scrapy.Field()
+    href = scrapy.Field()
