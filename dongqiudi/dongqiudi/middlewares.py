@@ -4,7 +4,7 @@
 #
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
-import requests
+import pandas as pd
 import random
 
 from scrapy import signals
@@ -70,12 +70,10 @@ class RandomProxyMiddleware(object):
     def __init__(self):
         # self.client = xxxx    # 建立 IP 池数据库客户端
         # self.ip_pools = dict(PROXIES)  # 获取池子里所有 IP
-        self.proxies = requests.get('http://dev.kuaidaili.com/api/getproxy',
-                                    params={'orderid': '971300293740350', 'num': '999', 'dedup': '1',
-                                            'sp1': '1'})
+        self.proxies = pd.read_csv('proxies.csv', sep='\t')
 
     def process_request(self, request, spider):
-        proxies_bodies = self.proxies.text.split('\n')
+        proxies_bodies = list(self.proxies['ip'])
         proxy = random.choice(proxies_bodies)
         print 'Proxy change to {}'.format(proxy)
         request.meta['proxy'] = 'http://{}'.format(proxy)
