@@ -105,6 +105,6 @@ MYSQL_DB = {
         'PORT': MYSQL_PORT
     }
 }
-LOG_LEVEL = "DEBUG"
+LOG_LEVEL = "INFO"
 
 # PROXIES = [('60.190.96.190', '808'), ('113.87.161.176', '8088'), ('222.174.168.102', '53281')]

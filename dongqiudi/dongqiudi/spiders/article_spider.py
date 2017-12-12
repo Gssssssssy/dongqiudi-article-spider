@@ -17,10 +17,10 @@ class DongQiuDiSpider(Spider):
                       'like Gecko) Version/4.0 Chrome/60.0.3112.116 Mobile Safari/537.36 News/127 Android/127 '
                       'NewsApp/127 SDK/25 '
     }
-    tabs = {1: '头条', 3: '英超', 4: '意甲', 5: '西甲', 6: '德甲', 37: '闲情',
-            55: '深度', 56: '国内', 57: '五洲', 58: '足彩', 104: '热门'}
+    tabs = {1: '头条', 3: '英超', 4: '意甲', 5: '西甲', 6: '德甲',
+            55: '深度', 56: '国内',}
     total_count = {1: 0, 3: 0, 4: 0, 5: 0, 6: 0, 37: 0, 55: 0, 56: 0, 57: 0, 58: 0, 104: 0}
-    baseline = 200  # 基线条件
+    baseline = 100  # 基线条件
 
     def start_requests(self):
         for i, key in enumerate(self.tabs.keys()):
