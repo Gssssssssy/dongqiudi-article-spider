@@ -94,7 +94,7 @@ ITEM_PIPELINES = {
 
 MYSQL_USER = 'root'
 MYSQL_PASS = 'root'
-MYSQL_HOST = '120.79.50.190'
+MYSQL_HOST = 'xxxxxxx'
 MYSQL_PORT = 3306
 
 MYSQL_DB = {
