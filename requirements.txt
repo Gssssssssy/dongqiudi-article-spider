@@ -6,7 +6,7 @@ certifi==2017.7.27.1
 cffi==1.11.2
 chardet==3.0.4
 constantly==15.1.0
-cryptography==2.1.2
+cryptography==3.2
 cssselect==1.0.1
 enum34==1.1.6
 hyperlink==17.3.1
